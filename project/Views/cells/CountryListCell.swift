@@ -14,7 +14,7 @@ struct CountryListCell: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(viewModel.name.official)
+                Text(viewModel.name.common)
                     .fontWeight(.bold)
                 HStack {
                     Text("Area: \(formatNumber(Int(viewModel.area)))")

@@ -8,8 +8,8 @@
 import Foundation
 
 struct CountriesViewModel: Codable, Identifiable {
-    var id: Int {
-        return self.population
+    var id: String {
+        return self.name.official
     }
     let name: Name
     let tld: [String]?

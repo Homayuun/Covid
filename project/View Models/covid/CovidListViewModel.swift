@@ -9,18 +9,25 @@ import Foundation
 
 class CovidListViewModel: ObservableObject {
     @Published var stats: [CovidStatsViewModel] = []
-    
+    @Published var searchTerm = ""
     var requestManager: RequestManagerProtocol
     
     init(requestManager: RequestManagerProtocol) {
         self.requestManager = requestManager
     }
     
+    var filteredStats: [CovidStatsViewModel] {
+        if searchTerm.isEmpty {
+            return stats
+        } else {
+            return stats.filter { $0.country.lowercased().contains(searchTerm.lowercased())}
+        }
+    }
     func fetchCovidStats() async -> [CovidStatsViewModel] {
         do {
             let covidData: CovidData = try await requestManager.perform(CovidRequest.getCovidStats)
             DispatchQueue.main.async {
-                self.stats = covidData.regionData.map(CovidStatsViewModel.init)
+                self.stats = covidData.regionData.map(CovidStatsViewModel.init).sorted { $0.country < $1.country }
             }
             return self.stats
         } catch {
@@ -29,6 +36,7 @@ class CovidListViewModel: ObservableObject {
         }
     }
 }
+
 
 
 struct CovidStatsViewModel: Identifiable {

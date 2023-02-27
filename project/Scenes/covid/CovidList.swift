@@ -10,12 +10,12 @@ import SwiftUI
 struct CovidList: View {
     
     @ObservedObject var viewModel: CovidListViewModel
-
+    
     var body: some View {
         NavigationView {
             NavigationStack {
                 List {
-                    ForEach(viewModel.stats.isEmpty ? [] : viewModel.stats, id: \.id) { stat in
+                    ForEach(viewModel.filteredStats, id: \.id) { stat in
                         CovidStatsCell(covidStats: stat)
                     }
                 }
@@ -26,5 +26,7 @@ struct CovidList: View {
             }
             .navigationTitle("Latest Stats")
         }
+        .searchable(text: $viewModel.searchTerm)
+
     }
 }
